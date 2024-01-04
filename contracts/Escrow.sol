@@ -35,6 +35,7 @@ contract Escrow {
     mapping(uint256 => uint256) public escrowAmount;
     mapping(uint256 => address) public buyer;
     mapping(uint256 => bool) public inspectionPassed;
+    mapping(uint256 => mapping(address => bool)) public approval;
 
     constructor(
         address _nftAddress, 
@@ -72,9 +73,22 @@ contract Escrow {
         inspectionPassed[_nftID] = _passed;
     }
 
+    function approveSale(uint256 _nftID) public {
+        approval[_nftID][msg.sender] = true;
+    }
+
     receive() external payable {}
 
     function getBalance() public view returns (uint256) {
         return address(this).balance;
+    }
+
+    function finalizeSale(uint256 _nftID) public {
+        require(inspectionPassed[_nftID]);
+        require(approval[_nftID][buyer[_nftID]]);
+        require(approval[_nftID][seller]);
+        require(approval[_nftID][lender]);
+        require(address(this).balance >= purchasePrice[_nftID]);
+        
     }
 }
