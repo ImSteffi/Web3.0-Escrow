@@ -11,17 +11,17 @@ contract RealEstate is ERC721URIStorage {
 
     constructor() ERC721("Real Estate", "REAL") {}
 
-        function mint(string memory tokenURI) public returns (uint256) {
-            _tokenIds.increment();
+    function mint(string memory tokenURI) public returns (uint256) {
+        _tokenIds.increment();
 
-            uint256 newItemId = _tokenIds.current();
-            _mint(msg.sender, newItemId);
-            _setTokenURI(newItemId, tokenURI);
+        uint256 newItemId = _tokenIds.current();
+        _mint(msg.sender, newItemId);
+        _setTokenURI(newItemId, tokenURI);
 
-            return newItemId;
-        }
+        return newItemId;
+    }
 
-        function totalSupply() public view returns (uint256) {
-            return _tokenIds.current();
-        }
+    function totalSupply() public view returns (uint256) {
+        return _tokenIds.current();
+    }
 }
